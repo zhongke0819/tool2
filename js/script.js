@@ -41,9 +41,24 @@ document.addEventListener('DOMContentLoaded', function() {
         showLoading();
         hideResult();
         
+        // Extract video ID from URL
+        const videoId = extractVideoId(url);
+        
+        if (!videoId) {
+            hideLoading();
+            resultElement.innerHTML = `
+                <div class="error-message">
+                    <h4>Error</h4>
+                    <p>Could not extract video ID from the provided URL. Please make sure it's a valid TikTok video URL.</p>
+                </div>
+            `;
+            resultElement.classList.add('show');
+            return;
+        }
+        
         // For RapidAPI, construct the URL with query parameters
         const apiUrl = new URL(API_CONFIG.API_ENDPOINT);
-        apiUrl.searchParams.append('url', url);
+        apiUrl.searchParams.append('video_id', videoId);
         
         // Add any additional parameters required by the API
         if (API_CONFIG.ADDITIONAL_PARAMS) {
