@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - TikTokTool.org</title>
+    <meta name="description" content="Contact the TikTokTool.org team, get support or provide feedback.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="/">
+                    <img src="images/logo.png" alt="TikTokTool Logo">
+                    <span>TikTokTool</span>
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/#how-to">How to Download</a></li>
+                    <li><a href="/#faq">FAQ</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-content">
+            <div class="container">
+                <h1>Contact Us</h1>
+                
+                <div class="contact-info">
+                    <p>If you have any questions, suggestions, or feedback, please feel free to contact us. Our team will respond to you as soon as possible.</p>
+                    
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <h3>General Inquiries</h3>
+                            <p><a href="mailto:info@tiktoktool.org">info@tiktoktool.org</a></p>
+                        </div>
+                        <div class="contact-method">
+                            <h3>Technical Support</h3>
+                            <p><a href="mailto:support@tiktoktool.org">support@tiktoktool.org</a></p>
+                        </div>
+                        <div class="contact-method">
+                            <h3>Business Opportunities</h3>
+                            <p><a href="mailto:business@tiktoktool.org">business@tiktoktool.org</a></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h2>Send Message</h2>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </form>
+                    <div id="formStatus" class="form-status"></div>
+                </div>
+                
+                <div class="faq-section">
+                    <h2>Frequently Asked Questions</h2>
+                    <p>Before contacting us, you might want to check our <a href="/#faq">FAQ</a> section for quick answers about our services.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="images/logo.png" alt="TikTokTool Logo">
+                    <p>TikTokTool.org</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/privacy.html">Privacy Policy</a></li>
+                        <li><a href="/terms.html">Terms of Service</a></li>
+                        <li><a href="/contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-languages">
+                    <h4>Languages</h4>
+                    <ul>
+                        <li><a href="?lang=en">English</a></li>
+                        <li><a href="?lang=zh">中文</a></li>
+                        <li><a href="?lang=es">Español</a></li>
+                        <li><a href="?lang=fr">Français</a></li>
+                        <li><a href="?lang=de">Deutsch</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="disclaimer">
+                <p>We are not affiliated with TikTok, Douyin, or ByteDance.</p>
+            </div>
+            <div class="copyright">
+                <p>Copyright © 2023-2025 TikTokTool.org</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Contact form handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.getElementById('contactForm');
+            const formStatus = document.getElementById('formStatus');
+            
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Get form data
+                    const formData = {
+                        name: document.getElementById('name').value,
+                        email: document.getElementById('email').value,
+                        subject: document.getElementById('subject').value,
+                        message: document.getElementById('message').value
+                    };
+                    
+                    // In a real application, an AJAX request should be sent to the server here
+                    // Here, we're just simulating a successful response
+                    formStatus.innerHTML = '<div class="success-message">Thank you for your message! We will get back to you as soon as possible.</div>';
+                    contactForm.reset();
+                    
+                    // Clear status message after 5 seconds
+                    setTimeout(() => {
+                        formStatus.innerHTML = '';
+                    }, 5000);
+                });
+            }
+        });
+    </script>
+</body>
+</html> 
