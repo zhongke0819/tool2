@@ -7,7 +7,7 @@
 
 const API_CONFIG = {
     // The API endpoint URL provided by your API service
-    API_ENDPOINT: 'https://tiktok-downloader-download-tiktok-videos-without-watermark.p.rapidapi.com/vid/index', // Original RapidAPI TikTok Downloader endpoint
+    API_ENDPOINT: 'https://rapidapi.com/tiktok-downloader-download-tiktok-videos-without-watermark.p.rapidapi.com/vid/index', // Updated RapidAPI endpoint
     
     // Your API key - leave empty if not required
     API_KEY: 'e0446dfc14msh25c8592ef0dee92p112e88jsnf6b483c4549d',
@@ -23,6 +23,9 @@ const API_CONFIG = {
     
     // RapidAPI Host header
     RAPID_API_HOST: 'tiktok-downloader-download-tiktok-videos-without-watermark.p.rapidapi.com',
+    
+    // Application name
+    APP_NAME: 'default-application_10441938',
     
     // Response mapping - maps the API response fields to our expected format
     // This is based on typical RapidAPI TikTok downloader response structure
