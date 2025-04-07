@@ -7,13 +7,13 @@
 
 const API_CONFIG = {
     // The API endpoint URL provided by your API service
-    API_ENDPOINT: 'https://tiktok-downloader-download-tiktok-videos-without-watermark.p.rapidapi.com/vid/index', // RapidAPI TikTok Downloader endpoint
+    API_ENDPOINT: 'https://tiktok-downloader-download-tiktok-videos-without-watermark.p.rapidapi.com/vid/index', // Original RapidAPI TikTok Downloader endpoint
     
     // Your API key - leave empty if not required
     API_KEY: 'e0446dfc14msh25c8592ef0dee92p112e88jsnf6b483c4549d',
     
     // API request method - usually POST, but check your API documentation
-    API_METHOD: 'GET', // Most RapidAPI endpoints use GET method
+    API_METHOD: 'GET', // Using GET method for this endpoint
     
     // Whether the API requires authentication
     REQUIRES_AUTH: true,
@@ -31,5 +31,11 @@ const API_CONFIG = {
         noWatermark: 'video.noWatermark', // Common path for no watermark URL
         withWatermark: 'video.watermark', // Common path for watermark URL
         audio: 'music.play' // Common path for audio URL
+    },
+    
+    // Additional parameters that might be required by the API
+    ADDITIONAL_PARAMS: {
+        // Add any additional parameters required by the API
+        // For example: 'format': 'mp4'
     }
 }; 

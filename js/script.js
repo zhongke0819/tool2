@@ -41,9 +41,18 @@ document.addEventListener('DOMContentLoaded', function() {
         showLoading();
         hideResult();
         
-        // For RapidAPI, construct the URL with the TikTok URL as a query parameter
+        // For RapidAPI, construct the URL with query parameters
         const apiUrl = new URL(API_CONFIG.API_ENDPOINT);
         apiUrl.searchParams.append('url', url);
+        
+        // Add any additional parameters required by the API
+        if (API_CONFIG.ADDITIONAL_PARAMS) {
+            Object.entries(API_CONFIG.ADDITIONAL_PARAMS).forEach(([key, value]) => {
+                if (value !== undefined && value !== null) {
+                    apiUrl.searchParams.append(key, value);
+                }
+            });
+        }
         
         // Prepare headers for API request
         const headers = {
@@ -52,14 +61,23 @@ document.addEventListener('DOMContentLoaded', function() {
             'X-RapidAPI-Host': API_CONFIG.RAPID_API_HOST
         };
         
+        console.log('Request URL:', apiUrl.toString());
+        console.log('Request Headers:', headers);
+        
         // API Request
         fetch(apiUrl.toString(), {
             method: API_CONFIG.API_METHOD,
             headers: headers
         })
         .then(response => {
+            console.log('Response status:', response.status);
+            console.log('Response headers:', [...response.headers.entries()]);
+            
             if (!response.ok) {
-                throw new Error(`API error: ${response.status}`);
+                return response.text().then(text => {
+                    console.error('Error response body:', text);
+                    throw new Error(`API error: ${response.status} - ${text}`);
+                });
             }
             return response.json();
         })
@@ -94,12 +112,20 @@ document.addEventListener('DOMContentLoaded', function() {
                     <h4>Error</h4>
                     <p>Sorry, we couldn't process your request. Please try again later or check if the URL is correct.</p>
                     <p class="error-details">Details: ${error.message}</p>
+                    <p class="error-details">If this error persists, please contact support with the error details.</p>
                 </div>
             `;
             resultElement.classList.add('show');
         });
     }
     
+    // Helper function to extract video ID from TikTok URL
+    function extractVideoId(url) {
+        // This is a simple implementation and might need to be adjusted based on actual URL formats
+        const match = url.match(/video\/(\d+)/);
+        return match ? match[1] : '';
+    }
+
     // Helper function to safely extract nested values from an object
     function getNestedValue(obj, path) {
         if (!path) return undefined;
