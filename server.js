@@ -27,13 +27,14 @@ app.get('/api/tiktok', (req, res) => {
     }
 
     const options = {
-        method: 'GET',
+        method: 'POST',
         hostname: 'tiktok-video-no-watermark2.p.rapidapi.com',
         port: null,
-        path: `/video/data?video_id=${videoId}`,
+        path: '/video/data',
         headers: {
             'X-RapidAPI-Key': 'e0446dfc14msh25c8592ef0dee92p112e88jsnf6b483c4549d',
-            'X-RapidAPI-Host': 'tiktok-video-no-watermark2.p.rapidapi.com'
+            'X-RapidAPI-Host': 'tiktok-video-no-watermark2.p.rapidapi.com',
+            'Content-Type': 'application/json'
         }
     };
 
@@ -73,6 +74,7 @@ app.get('/api/tiktok', (req, res) => {
         });
     });
 
+    apiReq.write(JSON.stringify({ video_id: videoId }));
     apiReq.end();
 });
 
