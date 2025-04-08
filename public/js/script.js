@@ -7,6 +7,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultElement = document.getElementById('result');
     const accordionItems = document.querySelectorAll('.accordion-item');
 
+    // YouTube元素
+    const youtubeUrlInput = document.getElementById('youtube-url');
+    const youtubeClearBtn = document.getElementById('youtube-clear-btn');
+    const youtubeDownloadBtn = document.getElementById('youtube-download-btn');
+    const youtubeLoading = document.getElementById('youtube-loading');
+    const youtubeResult = document.getElementById('youtube-result');
+
+    // 初始状态
+    loadingElement.style.display = 'none';
+    resultElement.style.display = 'none';
+
+    // 初始化YouTube元素
+    youtubeLoading.style.display = 'none';
+    youtubeResult.style.display = 'none';
+
     // Clear button event
     clearBtn.addEventListener('click', function() {
         tiktokUrlInput.value = '';
@@ -28,6 +43,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         processDownload(url);
+    });
+
+    // YouTube下载逻辑
+    youtubeClearBtn.addEventListener('click', function() {
+        youtubeUrlInput.value = '';
+        youtubeResult.innerHTML = '';
+        youtubeResult.style.display = 'none';
+    });
+
+    youtubeDownloadBtn.addEventListener('click', function() {
+        processYoutubeDownload();
+    });
+
+    // 输入框回车事件
+    youtubeUrlInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            processYoutubeDownload();
+        }
     });
 
     // Validate TikTok URL
@@ -208,4 +241,170 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    // 处理YouTube下载
+    function processYoutubeDownload() {
+        const url = youtubeUrlInput.value.trim();
+        
+        // 验证URL
+        if (!url) {
+            showYoutubeError('请输入YouTube视频链接');
+            return;
+        }
+
+        if (!isValidYoutubeUrl(url)) {
+            showYoutubeError('请输入有效的YouTube视频链接');
+            return;
+        }
+
+        // 显示加载状态
+        youtubeLoading.style.display = 'block';
+        youtubeResult.style.display = 'none';
+        youtubeResult.innerHTML = '';
+
+        // 构建API请求URL
+        const apiUrl = new URL('/api/youtube', window.location.origin);
+        apiUrl.searchParams.append('url', url);
+
+        // 发送请求
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw new Error(err.details || '请求失败');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                youtubeLoading.style.display = 'none';
+                
+                if (!data.streamingData || !data.streamingData.formats) {
+                    throw new Error('未找到视频下载链接');
+                }
+                
+                displayYoutubeResults(data);
+            })
+            .catch(error => {
+                youtubeLoading.style.display = 'none';
+                showYoutubeError(`下载失败: ${error.message}`);
+            });
+    }
+
+    // 显示YouTube错误
+    function showYoutubeError(message) {
+        youtubeLoading.style.display = 'none';
+        youtubeResult.style.display = 'block';
+        youtubeResult.innerHTML = `
+            <div class="error-message">
+                <h4>错误</h4>
+                <p>抱歉，我们无法处理您的请求。请稍后再试或检查URL是否正确。</p>
+                <p class="error-details">详情: ${message}</p>
+                <p class="error-details">如果此错误持续存在，请联系支持人员并提供错误详情。</p>
+            </div>
+        `;
+    }
+
+    // 显示YouTube结果
+    function displayYoutubeResults(data) {
+        youtubeResult.style.display = 'block';
+        
+        // 提取视频信息
+        const videoDetails = data.videoDetails || {};
+        const formats = data.streamingData?.formats || [];
+        const adaptiveFormats = data.streamingData?.adaptiveFormats || [];
+        
+        // 构建视频信息HTML
+        let html = `
+            <div class="video-info">
+                <h3>${videoDetails.title || '未知标题'}</h3>
+                <div class="video-meta">
+                    <p>时长: ${formatDuration(videoDetails.lengthSeconds || 0)}</p>
+                    <p>作者: ${videoDetails.author || '未知'}</p>
+                </div>
+                ${videoDetails.thumbnails ? `<img src="${videoDetails.thumbnails[videoDetails.thumbnails.length-1].url}" alt="缩略图">` : ''}
+            </div>
+            <div class="download-options">
+                <h4>视频下载选项:</h4>
+                <div class="download-links">
+        `;
+        
+        // 添加常规格式
+        if (formats.length > 0) {
+            formats.forEach((format, index) => {
+                if (format.url) {
+                    const quality = format.qualityLabel || `${format.width}x${format.height}`;
+                    html += `
+                        <div class="download-option">
+                            <span>${quality}</span>
+                            <a href="${format.url}" target="_blank" rel="noopener noreferrer" class="download-button">下载</a>
+                        </div>
+                    `;
+                }
+            });
+        }
+        
+        // 添加自适应格式
+        if (adaptiveFormats.length > 0) {
+            // 视频格式
+            const videoFormats = adaptiveFormats.filter(format => format.mimeType.includes('video/'));
+            if (videoFormats.length > 0) {
+                html += `<h4>仅视频:</h4>`;
+                videoFormats.forEach((format, index) => {
+                    if (format.url) {
+                        const quality = format.qualityLabel || `${format.width}x${format.height}`;
+                        html += `
+                            <div class="download-option">
+                                <span>${quality}</span>
+                                <a href="${format.url}" target="_blank" rel="noopener noreferrer" class="download-button">下载</a>
+                            </div>
+                        `;
+                    }
+                });
+            }
+            
+            // 音频格式
+            const audioFormats = adaptiveFormats.filter(format => format.mimeType.includes('audio/'));
+            if (audioFormats.length > 0) {
+                html += `<h4>仅音频:</h4>`;
+                audioFormats.forEach((format, index) => {
+                    if (format.url) {
+                        const quality = `${Math.round(format.bitrate/1000)}kbps`;
+                        html += `
+                            <div class="download-option">
+                                <span>${quality}</span>
+                                <a href="${format.url}" target="_blank" rel="noopener noreferrer" class="download-button">下载</a>
+                            </div>
+                        `;
+                    }
+                });
+            }
+        }
+        
+        html += `
+                </div>
+            </div>
+        `;
+        
+        youtubeResult.innerHTML = html;
+    }
+
+    // 格式化时长
+    function formatDuration(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        
+        if (hours > 0) {
+            return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        } else {
+            return `${minutes}:${secs.toString().padStart(2, '0')}`;
+        }
+    }
+
+    // 验证YouTube URL
+    function isValidYoutubeUrl(url) {
+        const pattern = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:\S+)?$/;
+        return pattern.test(url);
+    }
 }); 

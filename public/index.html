@@ -29,18 +29,33 @@
     </header>
 
     <main>
-        <section class="hero">
+        <section class="hero tiktok-section">
             <div class="container">
                 <h1>TikTok Video Downloader</h1>
                 <div class="download-form">
                     <div class="input-group">
-                        <input type="text" id="tiktok-url" placeholder="Paste TikTok video link here">
-                        <button id="clear-btn">Clear</button>
+                        <input type="text" id="tiktok-url" placeholder="粘贴TikTok视频链接到这里">
+                        <button id="clear-btn">清除</button>
                     </div>
-                    <button id="download-btn">Download</button>
+                    <button id="download-btn">下载</button>
                 </div>
-                <div id="loading" class="loading">Please wait</div>
+                <div id="loading" class="loading">请稍等</div>
                 <div id="result" class="result"></div>
+            </div>
+        </section>
+
+        <section class="hero youtube-section">
+            <div class="container">
+                <h1>YouTube Video Downloader</h1>
+                <div class="download-form">
+                    <div class="input-group">
+                        <input type="text" id="youtube-url" placeholder="粘贴YouTube视频链接到这里">
+                        <button id="youtube-clear-btn">清除</button>
+                    </div>
+                    <button id="youtube-download-btn">下载</button>
+                </div>
+                <div id="youtube-loading" class="loading">请稍等</div>
+                <div id="youtube-result" class="result"></div>
             </div>
         </section>
 
