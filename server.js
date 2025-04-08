@@ -1,6 +1,7 @@
 const express = require('express');
 const https = require('https');
 const cors = require('cors');
+const qs = require('querystring');
 const app = express();
 
 // 启用CORS
@@ -83,7 +84,7 @@ app.get('/api/tiktok', (req, res) => {
     apiReq.end();
 });
 
-// 代理YouTube API请求
+// 使用新的RapidAPI接口的YouTube API请求
 app.get('/api/youtube', (req, res) => {
     const videoUrl = req.query.url;
     const videoId = extractYoutubeId(videoUrl);
@@ -94,14 +95,16 @@ app.get('/api/youtube', (req, res) => {
         });
     }
 
+    // 创建新的请求选项
     const options = {
-        method: 'GET',
-        hostname: 'youtube-search-and-download.p.rapidapi.com',
+        method: 'POST',
+        hostname: 'youtube-media-downloader.p.rapidapi.com',
         port: null,
-        path: `/video?id=${videoId}`,
+        path: '/v2/video/details',
         headers: {
             'X-RapidAPI-Key': 'e0446dfc14msh25c8592ef0dee92p112e88jsnf6b483c4549d',
-            'X-RapidAPI-Host': 'youtube-search-and-download.p.rapidapi.com'
+            'X-RapidAPI-Host': 'youtube-media-downloader.p.rapidapi.com',
+            'Content-Type': 'application/x-www-form-urlencoded'
         }
     };
 
@@ -118,7 +121,7 @@ app.get('/api/youtube', (req, res) => {
                 const data = JSON.parse(body.toString());
                 
                 // 检查API响应中的错误
-                if (data.message && data.message !== 'success') {
+                if (data.status !== 'ok') {
                     throw new Error(data.message || 'API returned an error');
                 }
                 
@@ -141,6 +144,12 @@ app.get('/api/youtube', (req, res) => {
         });
     });
 
+    // 设置POST请求数据
+    const postData = qs.stringify({
+        videoId: videoId
+    });
+    
+    apiReq.write(postData);
     apiReq.end();
 });
 
