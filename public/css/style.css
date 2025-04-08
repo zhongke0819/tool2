@@ -79,10 +79,9 @@ nav ul li a:hover {
 
 /* 英雄区域 */
 .hero {
-    background: linear-gradient(135deg, #ee1d52, #69c9d0);
-    color: white;
     padding: 60px 0;
     text-align: center;
+    margin-bottom: 30px;
 }
 
 .hero h1 {
@@ -652,7 +651,8 @@ footer {
 
 /* 添加YouTube部分样式 */
 .youtube-section {
-    background: linear-gradient(135deg, #ff0000, #990000);
+    background: linear-gradient(135deg, #FF0000, #282828);
+    color: white;
     margin-top: 30px;
     padding: 60px 0;
 }

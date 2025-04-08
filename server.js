@@ -2,6 +2,7 @@ const express = require('express');
 const https = require('https');
 const cors = require('cors');
 const qs = require('querystring');
+require('dotenv').config();
 const app = express();
 
 // 启用CORS
@@ -36,12 +37,12 @@ app.get('/api/tiktok', (req, res) => {
 
     const options = {
         method: 'GET',
-        hostname: 'tiktok-video-no-watermark2.p.rapidapi.com',
+        hostname: process.env.TIKTOK_API_HOST,
         port: null,
         path: `/video/data?video_id=${videoId}`,
         headers: {
-            'X-RapidAPI-Key': 'e0446dfc14msh25c8592ef0dee92p112e88jsnf6b483c4549d',
-            'X-RapidAPI-Host': 'tiktok-video-no-watermark2.p.rapidapi.com'
+            'X-RapidAPI-Key': process.env.RAPIDAPI_KEY,
+            'X-RapidAPI-Host': process.env.TIKTOK_API_HOST
         }
     };
 
@@ -95,15 +96,14 @@ app.get('/api/youtube', (req, res) => {
         });
     }
 
-    // 创建新的请求选项
     const options = {
         method: 'POST',
-        hostname: 'youtube-media-downloader.p.rapidapi.com',
+        hostname: process.env.YOUTUBE_API_HOST,
         port: null,
         path: '/v2/video/details',
         headers: {
-            'X-RapidAPI-Key': 'e0446dfc14msh25c8592ef0dee92p112e88jsnf6b483c4549d',
-            'X-RapidAPI-Host': 'youtube-media-downloader.p.rapidapi.com',
+            'X-RapidAPI-Key': process.env.RAPIDAPI_KEY,
+            'X-RapidAPI-Host': process.env.YOUTUBE_API_HOST,
             'Content-Type': 'application/x-www-form-urlencoded'
         }
     };

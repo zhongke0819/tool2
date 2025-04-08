@@ -1,7 +1,7 @@
 /**
  * TikTokTool API Configuration
  * 
- * This file contains configuration settings for the TikTok downloader API.
+ * This file contains configuration settings for the TikTok and YouTube downloader API.
  * Replace the placeholder values with your actual API credentials.
  */
 
@@ -11,12 +11,10 @@ const isCloudflarePages = window.location.hostname.includes('.pages.dev');
 const isDevelopment = window.location.hostname === 'localhost';
 
 const API_CONFIG = {
-    // 根据环境选择不同的API端点
+    // TikTok API配置
     API_ENDPOINT: isDevelopment 
         ? 'http://localhost:3000/api/tiktok'
-        : isCloudflarePages
-            ? `${window.location.origin}/api/tiktok` // Cloudflare Pages环境
-            : 'https://api.your-proxy-service.com/api/tiktok', // 其他环境
+        : `${window.location.origin}/api/tiktok`,
     
     // API request method
     API_METHOD: 'GET',
@@ -32,5 +30,10 @@ const API_CONFIG = {
     },
 
     // YouTube功能配置
-    YOUTUBE_ENABLED: isDevelopment || isCloudflarePages // 在Cloudflare Pages和本地开发环境启用YouTube功能
+    YOUTUBE_ENABLED: true, // 启用YouTube功能
+    
+    // YouTube API配置
+    YOUTUBE_API_ENDPOINT: isDevelopment 
+        ? 'http://localhost:3000/api/youtube'
+        : `${window.location.origin}/api/youtube`,
 }; 
