@@ -15,7 +15,14 @@ function extractVideoId(url) {
     return match ? match[1] : null;
 }
 
-// 代理API请求
+// 从YouTube URL中提取视频ID
+function extractYoutubeId(url) {
+    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[7].length === 11) ? match[7] : null;
+}
+
+// 代理TikTok API请求
 app.get('/api/tiktok', (req, res) => {
     const videoUrl = req.query.url;
     const videoId = extractVideoId(videoUrl);
@@ -52,6 +59,67 @@ app.get('/api/tiktok', (req, res) => {
                 // 检查API响应中的错误
                 if (data.code !== 0) {
                     throw new Error(data.msg || 'API returned an error');
+                }
+                
+                res.json(data);
+            } catch (error) {
+                console.error('Error parsing response:', error);
+                res.status(500).json({
+                    error: 'Failed to process API response',
+                    details: error.message
+                });
+            }
+        });
+    });
+
+    apiReq.on('error', function (error) {
+        console.error('Error making request:', error);
+        res.status(500).json({
+            error: 'Failed to fetch video data',
+            details: error.message
+        });
+    });
+
+    apiReq.end();
+});
+
+// 代理YouTube API请求
+app.get('/api/youtube', (req, res) => {
+    const videoUrl = req.query.url;
+    const videoId = extractYoutubeId(videoUrl);
+
+    if (!videoId) {
+        return res.status(400).json({
+            error: 'Invalid YouTube URL. Could not extract video ID.'
+        });
+    }
+
+    const options = {
+        method: 'GET',
+        hostname: 'youtube-search-and-download.p.rapidapi.com',
+        port: null,
+        path: `/video?id=${videoId}`,
+        headers: {
+            'X-RapidAPI-Key': 'e0446dfc14msh25c8592ef0dee92p112e88jsnf6b483c4549d',
+            'X-RapidAPI-Host': 'youtube-search-and-download.p.rapidapi.com'
+        }
+    };
+
+    const apiReq = https.request(options, function (apiRes) {
+        const chunks = [];
+
+        apiRes.on('data', function (chunk) {
+            chunks.push(chunk);
+        });
+
+        apiRes.on('end', function () {
+            const body = Buffer.concat(chunks);
+            try {
+                const data = JSON.parse(body.toString());
+                
+                // 检查API响应中的错误
+                if (data.message && data.message !== 'success') {
+                    throw new Error(data.message || 'API returned an error');
                 }
                 
                 res.json(data);

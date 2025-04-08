@@ -1,15 +1,110 @@
-# TikTokTool.org
+# TikTok视频下载器
 
-TikTokTool.org is a tool for downloading TikTok videos without watermark, allowing users to download TikTok videos and remove watermarks.
+这是一个无水印TikTok视频下载工具，支持从TikTok和YouTube下载视频。
 
-## Features
+## 功能特点
 
-- Download TikTok videos without watermark
-- High-quality MP4 video download
-- MP3 audio extraction
-- Simple and easy-to-use interface
-- Support for mobile and desktop devices
-- Multi-language support
+- 无水印下载TikTok视频
+- 下载原始TikTok视频
+- 提取并下载视频中的音频
+- 下载YouTube视频（在Cloudflare Pages和本地环境可用）
+
+## 部署说明
+
+### 推荐部署方式：GitHub + Cloudflare Pages
+
+1. **GitHub仓库设置**
+   - 将代码推送到GitHub仓库
+   - 确保仓库结构正确，所有前端文件在`public`目录下
+
+2. **Cloudflare Pages设置**
+   - 在Cloudflare Pages中创建新项目
+   - 连接GitHub仓库
+   - 设置构建配置：
+     - 构建命令：`npm install && npm run build`（如果需要）
+     - 输出目录：`public`
+     - Node.js版本：选择合适的版本（推荐16.x或更高）
+   - 环境变量设置（如果需要）：
+     ```
+     NODE_ENV=production
+     API_KEY=your_api_key
+     ```
+
+3. **域名设置**
+   - 可以使用Cloudflare提供的`.pages.dev`域名
+   - 或配置自定义域名
+
+### 本地开发环境设置
+
+1. 克隆仓库：
+```bash
+git clone https://github.com/yourusername/tiktok-downloader.git
+cd tiktok-downloader
+```
+
+2. 安装依赖：
+```bash
+npm install
+```
+
+3. 启动开发服务器：
+```bash
+npm start
+```
+
+4. 打开浏览器访问：
+```
+http://localhost:3000
+```
+
+## 技术栈
+
+- 前端：HTML, CSS, JavaScript
+- 后端：Node.js, Express
+- 部署：Cloudflare Pages
+- API：TikTok无水印API, YouTube下载API
+
+## 项目结构
+
+```
+tiktoktool/
+├── public/              # 静态文件目录（前端文件）
+│   ├── index.html      # 主页
+│   ├── css/            # 样式文件
+│   ├── js/             # JavaScript文件
+│   └── images/         # 图片资源
+├── server.js           # Node.js服务器文件
+├── package.json        # 项目配置文件
+└── README.md           # 项目说明文档
+```
+
+## 环境说明
+
+项目支持三种运行环境：
+
+1. **本地开发环境**
+   - 完整功能支持（TikTok和YouTube下载）
+   - API端点：`http://localhost:3000`
+
+2. **Cloudflare Pages环境**
+   - 完整功能支持
+   - API端点：自动使用当前域名
+   - 支持后端API功能
+
+3. **其他环境（如GitHub Pages）**
+   - 仅支持TikTok下载功能
+   - 需要配置外部API服务
+
+## 注意事项
+
+- 确保在推送到GitHub之前已经正确配置了所有环境变量
+- 在Cloudflare Pages中可以设置不同的环境变量用于开发和生产环境
+- 建议定期备份数据和配置
+- 遵守相关服务条款和版权规定
+
+## 许可证
+
+MIT
 
 ## Project Structure
 

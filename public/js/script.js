@@ -8,19 +8,27 @@ document.addEventListener('DOMContentLoaded', function() {
     const accordionItems = document.querySelectorAll('.accordion-item');
 
     // YouTube元素
+    const youtubeSection = document.querySelector('.youtube-section');
     const youtubeUrlInput = document.getElementById('youtube-url');
     const youtubeClearBtn = document.getElementById('youtube-clear-btn');
     const youtubeDownloadBtn = document.getElementById('youtube-download-btn');
     const youtubeLoading = document.getElementById('youtube-loading');
     const youtubeResult = document.getElementById('youtube-result');
 
+    // 根据配置控制YouTube部分的显示
+    if (!API_CONFIG.YOUTUBE_ENABLED && youtubeSection) {
+        youtubeSection.style.display = 'none';
+    }
+
     // 初始状态
     loadingElement.style.display = 'none';
     resultElement.style.display = 'none';
 
     // 初始化YouTube元素
-    youtubeLoading.style.display = 'none';
-    youtubeResult.style.display = 'none';
+    if (youtubeLoading && youtubeResult) {
+        youtubeLoading.style.display = 'none';
+        youtubeResult.style.display = 'none';
+    }
 
     // Clear button event
     clearBtn.addEventListener('click', function() {
@@ -46,22 +54,26 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // YouTube下载逻辑
-    youtubeClearBtn.addEventListener('click', function() {
-        youtubeUrlInput.value = '';
-        youtubeResult.innerHTML = '';
-        youtubeResult.style.display = 'none';
-    });
+    if (API_CONFIG.YOUTUBE_ENABLED && youtubeClearBtn && youtubeDownloadBtn) {
+        youtubeClearBtn.addEventListener('click', function() {
+            youtubeUrlInput.value = '';
+            youtubeResult.innerHTML = '';
+            youtubeResult.style.display = 'none';
+        });
 
-    youtubeDownloadBtn.addEventListener('click', function() {
-        processYoutubeDownload();
-    });
-
-    // 输入框回车事件
-    youtubeUrlInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
+        youtubeDownloadBtn.addEventListener('click', function() {
             processYoutubeDownload();
+        });
+
+        // 输入框回车事件
+        if (youtubeUrlInput) {
+            youtubeUrlInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    processYoutubeDownload();
+                }
+            });
         }
-    });
+    }
 
     // Validate TikTok URL
     function isValidTikTokUrl(url) {
