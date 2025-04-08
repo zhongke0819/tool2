@@ -15,9 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const youtubeLoading = document.getElementById('youtube-loading');
     const youtubeResult = document.getElementById('youtube-result');
 
-    // 根据配置控制YouTube部分的显示
-    if (!API_CONFIG.YOUTUBE_ENABLED && youtubeSection) {
-        youtubeSection.style.display = 'none';
+    // 确保YouTube部分显示
+    if (youtubeSection) {
+        youtubeSection.style.display = 'block';
     }
 
     // 初始状态
@@ -36,43 +36,51 @@ document.addEventListener('DOMContentLoaded', function() {
         hideResult();
     });
 
+    // YouTube clear button event
+    if (youtubeClearBtn) {
+        youtubeClearBtn.addEventListener('click', function() {
+            youtubeUrlInput.value = '';
+            if (youtubeResult) {
+                youtubeResult.style.display = 'none';
+                youtubeResult.innerHTML = '';
+            }
+        });
+    }
+
     // Download button event
     downloadBtn.addEventListener('click', function() {
         const url = tiktokUrlInput.value.trim();
         
         if (!url) {
-            alert('Please enter a valid TikTok video link!');
+            alert('请输入有效的 TikTok 视频链接！');
             return;
         }
         
         if (!isValidTikTokUrl(url)) {
-            alert('Please enter a valid TikTok video link!');
+            alert('请输入有效的 TikTok 视频链接！');
             return;
         }
         
         processDownload(url);
     });
 
-    // YouTube下载逻辑
-    if (API_CONFIG.YOUTUBE_ENABLED && youtubeClearBtn && youtubeDownloadBtn) {
-        youtubeClearBtn.addEventListener('click', function() {
-            youtubeUrlInput.value = '';
-            youtubeResult.innerHTML = '';
-            youtubeResult.style.display = 'none';
-        });
-
+    // YouTube download button event
+    if (youtubeDownloadBtn) {
         youtubeDownloadBtn.addEventListener('click', function() {
-            processYoutubeDownload();
+            const url = youtubeUrlInput.value.trim();
+            
+            if (!url) {
+                alert('请输入有效的 YouTube 视频链接！');
+                return;
+            }
+            
+            if (!isValidYoutubeUrl(url)) {
+                alert('请输入有效的 YouTube 视频链接！');
+                return;
+            }
+            
+            processYoutubeDownload(url);
         });
-
-        // 输入框回车事件
-        if (youtubeUrlInput) {
-            youtubeUrlInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    processYoutubeDownload();
-                }
-            });
-        }
     }
 
     // Validate TikTok URL
@@ -255,14 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Process YouTube download
-    function processYoutubeDownload() {
-        const url = youtubeUrlInput.value.trim();
-        
-        if (!url || !isValidYoutubeUrl(url)) {
-            alert('请输入有效的 YouTube 视频链接！');
-            return;
-        }
-
+    function processYoutubeDownload(url) {
         youtubeLoading.style.display = 'block';
         youtubeResult.style.display = 'none';
         youtubeResult.innerHTML = '';
