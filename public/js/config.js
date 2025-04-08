@@ -26,4 +26,4 @@ const API_CONFIG = {
     
     // YouTube API配置
     YOUTUBE_API_ENDPOINT: '/api/youtube'
-}; 
+};
