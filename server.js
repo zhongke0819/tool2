@@ -5,6 +5,13 @@ const qs = require('querystring');
 require('dotenv').config();
 const app = express();
 
+// 打印环境变量以进行调试
+console.log('Environment variables:', {
+    RAPIDAPI_KEY: process.env.RAPIDAPI_KEY,
+    TIKTOK_API_HOST: process.env.TIKTOK_API_HOST,
+    YOUTUBE_API_HOST: process.env.YOUTUBE_API_HOST
+});
+
 // 启用CORS
 app.use(cors());
 
@@ -27,7 +34,10 @@ function extractYoutubeId(url) {
 // 代理TikTok API请求
 app.get('/api/tiktok', (req, res) => {
     const videoUrl = req.query.url;
+    console.log('Received TikTok request for URL:', videoUrl);
+    
     const videoId = extractVideoId(videoUrl);
+    console.log('Extracted video ID:', videoId);
 
     if (!videoId) {
         return res.status(400).json({
@@ -46,7 +56,10 @@ app.get('/api/tiktok', (req, res) => {
         }
     };
 
+    console.log('Making API request with options:', options);
+
     const apiReq = https.request(options, function (apiRes) {
+        console.log('Received API response with status:', apiRes.statusCode);
         const chunks = [];
 
         apiRes.on('data', function (chunk) {
@@ -57,6 +70,7 @@ app.get('/api/tiktok', (req, res) => {
             const body = Buffer.concat(chunks);
             try {
                 const data = JSON.parse(body.toString());
+                console.log('API Response data:', data);
                 
                 // 检查API响应中的错误
                 if (data.code !== 0) {
