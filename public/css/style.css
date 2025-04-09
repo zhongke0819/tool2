@@ -1005,4 +1005,105 @@ footer {
 
 .youtube-section .search-result-item .select-btn:hover {
     background-color: #cc0000;
+}
+
+.download-section {
+    background: linear-gradient(135deg, #ee1d52, #69c9d0);
+    padding: 60px 0;
+    color: white;
+}
+
+.search-container {
+    display: flex;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.search-box {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.search-box h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: white;
+}
+
+.search-box .download-form {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.search-box .input-group {
+    margin-bottom: 15px;
+}
+
+.search-box .input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.search-box .input-group button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.search-box .input-group button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.search-box #download-btn,
+.search-box #youtube-download-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #ff0000;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.search-box #download-btn:hover,
+.search-box #youtube-download-btn:hover {
+    background: #cc0000;
+}
+
+.search-box .loading,
+.search-box .result {
+    margin-top: 20px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .search-container {
+        flex-direction: column;
+    }
+    
+    .search-box {
+        margin-bottom: 20px;
+    }
 } 

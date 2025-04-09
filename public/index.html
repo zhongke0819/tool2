@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Video Downloader - No Watermark | TikTokTool.org</title>
-    <meta name="description" content="Free TikTok video downloader, no watermark, high quality, MP4 and MP3 format.">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+    <title>视频下载器</title>
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="icon" type="image/x-icon" href="/public/images/favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -14,7 +13,7 @@
         <div class="container">
             <div class="logo">
                 <a href="/">
-                    <img src="/images/logo.png" alt="TikTokTool Logo">
+                    <img src="/public/images/logo.png" alt="TikTokTool Logo">
                     <span>TikTokTool</span>
                 </a>
             </div>
@@ -29,38 +28,40 @@
     </header>
 
     <main>
-        <section class="hero tiktok-section">
+        <section class="hero download-section">
             <div class="container">
-                <h1>TikTok Video Downloader</h1>
-                <div class="download-form">
-                    <div class="input-group">
-                        <input type="text" id="tiktok-url" placeholder="粘贴TikTok视频链接到这里">
-                        <button id="clear-btn">清除</button>
+                <div class="search-container">
+                    <div class="search-box tiktok-search">
+                        <h2>TikTok Video Downloader</h2>
+                        <div class="download-form">
+                            <div class="input-group">
+                                <input type="text" id="tiktok-url" placeholder="粘贴TikTok视频链接到这里">
+                                <button id="clear-btn">清除</button>
+                            </div>
+                            <button id="download-btn">下载</button>
+                        </div>
+                        <div id="loading" class="loading">请稍等</div>
+                        <div id="result" class="result"></div>
                     </div>
-                    <button id="download-btn">下载</button>
-                </div>
-                <div id="loading" class="loading">请稍等</div>
-                <div id="result" class="result"></div>
-            </div>
-        </section>
 
-        <section class="hero youtube-section">
-            <div class="container">
-                <h1>YouTube Video Downloader</h1>
-                <div class="download-form">
-                    <div class="input-group">
-                        <input type="text" id="youtube-search" placeholder="搜索 YouTube 视频">
-                        <button id="youtube-search-btn">搜索</button>
+                    <div class="search-box youtube-search">
+                        <h2>YouTube Video Downloader</h2>
+                        <div class="download-form">
+                            <div class="input-group">
+                                <input type="text" id="youtube-search" placeholder="搜索 YouTube 视频">
+                                <button id="youtube-search-btn">搜索</button>
+                            </div>
+                            <div class="search-results" id="youtube-search-results"></div>
+                            <div class="input-group">
+                                <input type="text" id="youtube-url" placeholder="粘贴YouTube视频链接到这里">
+                                <button id="youtube-clear-btn">清除</button>
+                            </div>
+                            <button id="youtube-download-btn">下载</button>
+                        </div>
+                        <div id="youtube-loading" class="loading">请稍等</div>
+                        <div id="youtube-result" class="result"></div>
                     </div>
-                    <div class="search-results" id="youtube-search-results"></div>
-                    <div class="input-group">
-                        <input type="text" id="youtube-url" placeholder="粘贴YouTube视频链接到这里">
-                        <button id="youtube-clear-btn">清除</button>
-                    </div>
-                    <button id="youtube-download-btn">下载</button>
                 </div>
-                <div id="youtube-loading" class="loading">请稍等</div>
-                <div id="youtube-result" class="result"></div>
             </div>
         </section>
 
@@ -153,7 +154,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <img src="/images/logo.png" alt="TikTokTool Logo">
+                    <img src="/public/images/logo.png" alt="TikTokTool Logo">
                     <p>TikTokTool.org</p>
                 </div>
                 <div class="footer-links">
@@ -186,8 +187,8 @@
     </footer>
 
     <!-- Load configuration first -->
-    <script src="/js/config.js"></script>
+    <script src="/public/js/config.js"></script>
     <!-- Then load main script -->
-    <script src="/js/script.js"></script>
+    <script src="/public/js/script.js"></script>
 </body>
 </html> 
