@@ -352,4 +352,89 @@ document.addEventListener('DOMContentLoaded', function() {
         const pattern = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
         return pattern.test(url);
     }
-}); 
+
+    // 初始化 YouTube 部分
+    if (youtubeSection) {
+        youtubeSection.style.display = 'block';
+        
+        // 初始化 YouTube 搜索功能
+        const youtubeSearchInput = document.getElementById('youtube-search');
+        const youtubeSearchBtn = document.getElementById('youtube-search-btn');
+        const youtubeDownloadBtn = document.getElementById('youtube-download-btn');
+        
+        if (youtubeSearchBtn) {
+            youtubeSearchBtn.addEventListener('click', function() {
+                const searchQuery = youtubeSearchInput.value.trim();
+                if (searchQuery) {
+                    searchYouTubeVideos(searchQuery);
+                }
+            });
+        }
+        
+        if (youtubeDownloadBtn) {
+            youtubeDownloadBtn.addEventListener('click', function() {
+                const videoUrl = document.getElementById('youtube-url').value.trim();
+                if (videoUrl) {
+                    downloadYouTubeVideo(videoUrl);
+                }
+            });
+        }
+    }
+});
+
+// YouTube 搜索功能
+async function searchYouTubeVideos(query) {
+    const youtubeLoading = document.getElementById('youtube-loading');
+    const youtubeResult = document.getElementById('youtube-result');
+    
+    youtubeLoading.style.display = 'block';
+    youtubeResult.style.display = 'none';
+    youtubeResult.innerHTML = '';
+    
+    try {
+        const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&key=${API_CONFIG.YOUTUBE_API_KEY}`);
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error.message);
+        }
+        
+        let html = '<div class="search-results">';
+        data.items.forEach(item => {
+            html += `
+                <div class="search-result-item">
+                    <img src="${item.snippet.thumbnails.medium.url}" alt="${item.snippet.title}">
+                    <div class="video-info">
+                        <h3>${item.snippet.title}</h3>
+                        <p>${item.snippet.description}</p>
+                        <button class="select-video-btn" data-video-id="${item.id.videoId}">选择此视频</button>
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        
+        youtubeResult.innerHTML = html;
+        youtubeResult.style.display = 'block';
+        
+        // 添加选择视频的事件监听
+        document.querySelectorAll('.select-video-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const videoId = this.dataset.videoId;
+                const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+                document.getElementById('youtube-url').value = videoUrl;
+                youtubeResult.style.display = 'none';
+            });
+        });
+    } catch (error) {
+        youtubeResult.innerHTML = `
+            <div class="error-message">
+                <h4>搜索错误</h4>
+                <p>${error.message}</p>
+            </div>
+        `;
+        youtubeResult.style.display = 'block';
+    } finally {
+        youtubeLoading.style.display = 'none';
+    }
+} 
