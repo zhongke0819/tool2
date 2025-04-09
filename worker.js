@@ -119,40 +119,28 @@ async function handleYouTubeRequest(request, env) {
     }
 }
 
-// 处理静态文件请求
-async function handleStaticRequest(request) {
-    const url = new URL(request.url);
-    let path = url.pathname;
-    
-    // 如果路径是根路径或没有扩展名，返回 index.html
-    if (path === '/' || !path.includes('.')) {
-        path = '/index.html';
-    }
-
-    try {
-        const response = await fetch(`https://your-cloudflare-pages-domain.pages.dev${path}`);
-        return response;
-    } catch (error) {
-        return new Response('Not Found', { status: 404 });
-    }
+// 处理 CORS 预检请求
+function handleCors() {
+    return new Response(null, {
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, X-Requested-With',
+            'Access-Control-Max-Age': '86400'
+        }
+    });
 }
 
 // 主处理函数
 export default {
     async fetch(request, env, ctx) {
-        const url = new URL(request.url);
-        const path = url.pathname;
-
         // 处理 CORS 预检请求
         if (request.method === 'OPTIONS') {
-            return new Response(null, {
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Content-Type'
-                }
-            });
+            return handleCors();
         }
+
+        const url = new URL(request.url);
+        const path = url.pathname;
 
         // 根据路径分发请求
         if (path === '/api/tiktok') {
@@ -160,7 +148,7 @@ export default {
         } else if (path === '/api/youtube') {
             return handleYouTubeRequest(request, env);
         } else {
-            return handleStaticRequest(request);
+            return new Response('Not Found', { status: 404 });
         }
     }
 }; 

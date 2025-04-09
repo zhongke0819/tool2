@@ -4,9 +4,12 @@
  * This file contains configuration settings for the TikTok and YouTube downloader API.
  */
 
+// 检测当前域名
+const currentHostname = window.location.hostname;
+
 const API_CONFIG = {
     // TikTok API配置
-    API_ENDPOINT: '/api/tiktok',
+    API_ENDPOINT: 'https://tiktok-downloader.zhongke0819.workers.dev/api/tiktok',
     
     // API request method
     API_METHOD: 'GET',
@@ -25,5 +28,5 @@ const API_CONFIG = {
     YOUTUBE_ENABLED: true,
     
     // YouTube API配置
-    YOUTUBE_API_ENDPOINT: '/api/youtube'
+    YOUTUBE_API_ENDPOINT: 'https://tiktok-downloader.zhongke0819.workers.dev/api/youtube'
 };
