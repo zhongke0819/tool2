@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const urlInput = document.getElementById('videoUrl'); // 修改为HTML中实际的ID
-    const downloadBtn = document.getElementById('downloadBtn'); // 修改为HTML中实际的ID
+    const urlInput = document.getElementById('videoUrl');
+    const downloadBtn = document.getElementById('downloadBtn');
     const resultDiv = document.getElementById('result');
-    const loadingDiv = document.getElementById('loading'); // 获取加载提示元素
+    const loadingDiv = document.getElementById('loading');
 
     downloadBtn.addEventListener('click', async () => {
         const url = urlInput.value.trim();
@@ -15,35 +15,47 @@ document.addEventListener('DOMContentLoaded', () => {
             // 显示加载状态
             loadingDiv.style.display = 'block';
             
-            // 这里使用 Cloudflare Workers API 端点
-            const response = await fetch('https://30e607dc.tok-downloader.pages.dev/', {
-                method: 'POST',
+            // 使用RapidAPI的TikTok Video No Watermark API
+            const options = {
+                method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ url })
-            });
-
+                    'X-RapidAPI-Key': 'e0446dfc14msh25c8592ef0dee92p112e88jsnf6b483c4549d',
+                    'X-RapidAPI-Host': 'tiktok-video-no-watermark2.p.rapidapi.com'
+                }
+            };
+            
+            // 构建API URL (使用encodeURIComponent确保URL安全传输)
+            const apiUrl = `https://tiktok-video-no-watermark2.p.rapidapi.com/info?url=${encodeURIComponent(url)}`;
+            
+            const response = await fetch(apiUrl, options);
+            
             // 隐藏加载状态
             loadingDiv.style.display = 'none';
-
+            
             if (!response.ok) {
-                throw new Error('获取视频信息失败');
+                throw new Error(`API请求失败: ${response.status} ${response.statusText}`);
             }
-
-            const data = await response.json();
-
+            
+            const responseData = await response.json();
+            
+            // 检查API响应
+            if (!responseData.success) {
+                throw new Error(responseData.message || '获取视频信息失败');
+            }
+            
+            const data = responseData.data;
+            
             // 显示视频信息和下载按钮
             if (resultDiv) {
                 resultDiv.innerHTML = `
                     <div class="card mt-4">
-                        <img src="${data.thumbnailUrl}" class="card-img-top" alt="视频缩略图" style="max-height: 300px; object-fit: cover;">
+                        <img src="${data.cover}" class="card-img-top" alt="视频缩略图" style="max-height: 300px; object-fit: cover;">
                         <div class="card-body">
-                            <h5 class="card-title">@${data.username}</h5>
-                            <p class="card-text">上传时间：${data.uploadTime}</p>
+                            <h5 class="card-title">@${data.author.nickname}</h5>
+                            <p class="card-text">${data.title || '无标题'}</p>
                             <div class="d-flex justify-content-center gap-3">
-                                <a href="${data.videoUrl}" class="btn btn-primary" download>下载原视频</a>
-                                <a href="${data.watermarkFreeUrl}" class="btn btn-success" download>下载无水印视频</a>
+                                <a href="${data.play}" class="btn btn-primary" download>下载原视频</a>
+                                <a href="${data.play_nwm}" class="btn btn-success" download>下载无水印视频</a>
                             </div>
                         </div>
                     </div>
@@ -54,7 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             // 隐藏加载状态
             loadingDiv.style.display = 'none';
-            showError(error.message);
+            console.error('下载错误:', error);
+            showError(error.message || '下载视频时发生错误');
         }
     });
 
