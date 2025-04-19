@@ -1,0 +1,98 @@
+# Web
+Web:
+  # APP Switch
+  PyWebIO_Enable: true    # Enable APP | 启用APP
+
+  # APP Information
+  Domain: https://tiktoktool.org    # Web domain | Web域名
+
+  # APP Configuration
+  PyWebIO_Theme: minty    # PyWebIO theme | PyWebIO主题
+  Max_Take_URLs: 50    # Maximum number of URLs that can be taken at a time | 一次最多可以取得的URL数量
+
+
+  # Web Information
+  Tab_Title: TikTokTool    # Web title | Web标题
+  Description: 专业的视频解析下载工具，支持抖音/TikTok/快手/Bilibili等平台    # Web description | Web描述
+  Favicon: /static/images/favicon.png    # Web favicon | Web图标
+
+  # Fun Configuration
+  Easter_Egg: true    # Enable Easter Egg | 启用彩蛋
+  Live2D_Enable: true
+  Live2D_JS: https://fastly.jsdelivr.net/gh/TikHubIO/TikHub_live2d@latest/autoload.js
+
+# API
+API:
+  # Network Configuration
+  Host_IP: 0.0.0.0    # default IP | 默认IP
+  Host_Port: 80    # default port is 80 | 默认端口为80
+  Docs_URL: /docs    # API documentation URL | API文档URL
+  Redoc_URL: /redoc    # API documentation URL | API文档URL
+
+  # API Information
+  Version: V1.0.0    # API version | API版本
+  Update_Time: 2024/03/21    # API update time | API更新时间
+  Environment: Production    # API environment | API环境
+
+  # Download Configuration
+  Download_Switch: true    # Enable download function | 启用下载功能
+
+  # File Configuration
+  Download_Path: "./download"    # Default download directory | 默认下载目录
+  Download_File_Prefix: "tiktoktool_"    # Default download file prefix | 默认下载文件前缀
+  Max_Download_Size: 50MB    # Maximum download size | 最大下载大小
+
+# Performance
+Performance:
+  Rate_Limit: 100    # Rate limit | 请求限制
+  Concurrent_Downloads: 10    # Concurrent downloads | 同时下载数量
+  Cache_Enable: true    # Enable cache | 启用缓存
+  Cache_Expire: 3600    # Cache expire time | 缓存过期时间（秒）
+
+# Security
+Security:
+  Enable_CORS: true    # Enable CORS | 启用CORS
+  Allowed_Origins: ["https://tiktoktool.org"]    # Allowed origins | 允许的来源
+  Enable_SSL: true    # Enable SSL | 启用SSL
+  SSL_Cert: "/etc/letsencrypt/live/tiktoktool.org/fullchain.pem"    # SSL certificate | SSL证书
+  SSL_Key: "/etc/letsencrypt/live/tiktoktool.org/privkey.pem"    # SSL key | SSL密钥
+  Rate_Limit_By_IP: true    # Rate limit by IP | 按IP限制请求
+
+# User
+User:
+  Enable: true    # Enable user system | 启用用户系统
+  Register_Enable: true    # Enable registration | 启用注册
+  Guest_Download: true    # Enable guest download | 启用游客下载
+  Guest_Daily_Limit: 5    # Guest daily download limit | 游客每日下载限制
+  VIP_Daily_Limit: 100    # VIP daily download limit | VIP每日下载限制
+
+# iOS Shortcut
+iOS_Shortcut:
+  iOS_Shortcut_Version: 7.0
+  iOS_Shortcut_Update_Time: 2024/07/05
+  iOS_Shortcut_Link: https://www.icloud.com/shortcuts/06f891a026df40cfa967a907feaea632
+  iOS_Shortcut_Link_EN: https://www.icloud.com/shortcuts/06f891a026df40cfa967a907feaea632
+  iOS_Shortcut_Update_Note: 重构了快捷指令以兼容TikHub API。
+  iOS_Shortcut_Update_Note_EN: Refactored the shortcut to be compatible with the TikHub API.
+
+site:
+  name: "TikTokTool"
+  description: "在线视频解析下载工具"
+  domain: "tiktoktool.org"
+  
+server:
+  host: "0.0.0.0"
+  port: 80
+  debug: false
+  
+api:
+  rate_limit: 100  # 每分钟请求限制
+  download_limit: 50MB  # 单个视频下载大小限制
+  
+security:
+  enable_cors: true
+  allowed_origins: ["*"]
+  
+cache:
+  enable: true
+  expire: 3600  # 缓存过期时间（秒）
